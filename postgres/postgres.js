@@ -1,11 +1,11 @@
 import {Sequelize} from 'sequelize';
 import { createUserModel } from '../model/userSchema.js';
+import env from 'dotenv';
+env.config();
 
-
-
-const sequelize = new Sequelize('', 'postgres', 'root', {
-  host: 'localhost',
-  dialect: 'postgres'
+const sequelize = new Sequelize(process.env.dbname, process.env.dbuser, process.env.dbpassword, {
+  host: process.env.host,
+  dialect: process.env.dialect
 });
 
 let UserModel=null;
@@ -19,8 +19,13 @@ const connection=async()=>{
       } catch (error) {
         console.error('Unable to connect to the database:', error);
       }
-}
+};
+
+const getUserModel = () => UserModel;
 
 export{
-    connection
+  sequelize,
+  connection,
+  UserModel,
+  getUserModel
 }
